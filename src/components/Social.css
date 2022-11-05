@@ -1,0 +1,41 @@
+.social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  flex-wrap: wrap;
+
+  &__item {
+  }
+  &__link {
+    color: #788cab;
+    width: 36px;
+    height: 36px;
+    background-color: #f3f3f3;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: color, background-color;
+
+    @mixin dark {
+      color: #b6b6b6;
+      background-color: #000000;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--color);
+      color: #ffffff;
+    }
+  }
+  &__icon {
+    fill: currentColor;
+    position: relative;
+  }
+}
