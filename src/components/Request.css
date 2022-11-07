@@ -1,0 +1,202 @@
+.request {
+  color: #0a0522;
+  border-radius: 20px;
+  padding: 16px;
+  text-align: center;
+  position: relative;
+  background-size: cover;
+
+  &__form {
+  }
+  &_loading &__form,
+  &_success &__form {
+    opacity: 0;
+  }
+  &__title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 4px;
+  }
+  &__desc {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+  &__field {
+    margin-bottom: 16px;
+    position: relative;
+  }
+  &__input {
+    height: 48px;
+    border: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 16px;
+    font-weight: 400;
+    font-size: 15px;
+    padding: 14px 48px 0 44px;
+
+    &::placeholder {
+      opacity: 0;
+    }
+
+    &:focus {
+      outline: 0;
+    }
+  }
+  &__label {
+    font-weight: 400;
+    font-size: 15px;
+    color: #5e6674;
+    position: absolute;
+    left: 44px;
+    right: 48px;
+    top: 0;
+    text-align: left;
+    margin-top: 13px;
+    pointer-events: none;
+    transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition-property: transform, font-size;
+  }
+  &__input:not(:placeholder-shown) ~ &__label,
+  &__input:focus ~ &__label {
+    transform: translateY(-10px);
+    font-size: 12px;
+  }
+  &__addon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  &__addon-icon {
+    color: #788cab;
+    height: 20px;
+    position: relative;
+    top: 1px;
+  }
+  &__button {
+    width: 36px;
+    height: 36px;
+    background-color: #000000;
+    border-radius: 50%;
+    border: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    right: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:focus {
+      outline: 0;
+    }
+
+    &:hover,
+    &:focus-visible {
+      opacity: 0.7;
+    }
+  }
+  &__button-icon {
+    height: 20px;
+    position: relative;
+    left: 2px;
+    color: #ffffff;
+  }
+  &__note {
+    font-size: 11px;
+    color: rgba(65, 65, 65, 0.8);
+  }
+
+  &__spinner {
+    width: 40px;
+    height: 40px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    @keyframes request-spin {
+      to {
+        transform: rotate(-360deg);
+      }
+    }
+
+    animation: request-spin 0.8s linear infinite;
+  }
+  &_loading &__spinner {
+    display: flex;
+  }
+  &__spinner-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-image: conic-gradient(
+      from 180deg,
+      rgba(9, 208, 206, 1),
+      rgba(9, 208, 206, 0) 90%
+    );
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      display: block;
+      width: 16px;
+      height: 16px;
+      background-color: #fff;
+      border-radius: inherit;
+    }
+  }
+
+  &__success {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #c0ff1e;
+    border-radius: inherit;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  &_success &__success {
+    display: flex;
+  }
+  &__success-badge {
+    width: 60px;
+    height: 60px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  &__success-icon {
+    color: #171717;
+    height: 38px;
+  }
+  &__success-text {
+    font-weight: 500;
+    font-size: 15px;
+  }
+}

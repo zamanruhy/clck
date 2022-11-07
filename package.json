@@ -23,17 +23,16 @@
     "prerender": "npm run build && node prerender && rimraf dist/server",
     "preview": "npm run prerender && vite preview",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,html}\""
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,html}\"",
+    "ghpages": "deploy.sh"
   },
   "dependencies": {
     "imask": "^6.4.2",
-    "solid-js": "^1.5.3",
-    "unocss": "^0.45.21"
+    "solid-js": "^1.5.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
-    "@unocss/preset-rem-to-px": "^0.45.21",
     "@vitejs/plugin-legacy": "^2.0.1",
     "autoprefixer": "^10.4.8",
     "eslint": "^8.22.0",
@@ -55,7 +54,6 @@
     "vite": "^3.0.8",
     "vite-imagetools": "^4.0.7",
     "vite-plugin-eslint": "^1.8.1",
-    "vite-plugin-mini-svg": "workspace:*",
     "vite-plugin-solid": "^2.3.0",
     "vite-plugin-solid-svg": "^0.4.1"
   },

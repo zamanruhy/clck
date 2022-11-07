@@ -17,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const toAbsolute = (p) => path.resolve(__dirname, p)
 
 const template = fs.readFileSync(toAbsolute('dist/index.html'), 'utf-8')
-const { render } = await import('./dist/server/js/entry-server.js')
+const { render } = await import('./dist/server/static/js/entry-server.js')
 
 // determine routes to pre-render from src/pages
 const routesToPrerender = fs

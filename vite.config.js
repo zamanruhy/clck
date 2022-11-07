@@ -3,15 +3,12 @@ import path from 'node:path'
 import eslint from 'vite-plugin-eslint'
 import solid from 'vite-plugin-solid'
 import solidSvg from 'vite-plugin-solid-svg'
-import miniSvg from 'vite-plugin-mini-svg'
 import legacy from '@vitejs/plugin-legacy'
 import { imagetools } from 'vite-imagetools'
-// import Unocss from 'unocss/vite'
 
 export default defineConfig({
   // base: './',
   plugins: [
-    // Unocss(),
     imagetools({
       defaultDirectives: (url) => {
         return new URLSearchParams({ metadata: 'src;width;height;format' })
@@ -24,7 +21,7 @@ export default defineConfig({
     }),
     eslint(),
     solid({ ssr: true, solid: { hydratable: false } }),
-    // miniSvg(),
+
     solidSvg({
       defaultExport: 'url',
       svgo: {
@@ -58,19 +55,6 @@ export default defineConfig({
           ]
         }
       }
-    }),
-    miniSvg({
-      svgoConfig: {
-        multipass: true,
-        plugins: [
-          {
-            name: 'preset-default',
-            params: {
-              overrides: { convertPathData: { floatPrecision: 2 } }
-            }
-          }
-        ]
-      }
     })
   ],
   resolve: {
@@ -91,22 +75,24 @@ export default defineConfig({
       output: {
         // entryFileNames: 'js/app.js',
         entryFileNames({ name }) {
-          return name === 'index' ? 'js/app.js' : 'js/[name].js'
+          return name === 'index' ? 'static/js/app.js' : 'static/js/[name].js'
         },
-        chunkFileNames: 'js/[name].js',
+        chunkFileNames: 'static/js/[name].js',
         // assetFileNames: `assets/[name].[ext]`,
         assetFileNames({ name }) {
           // console.log('===NAME===', name)
           if (name.match(/\.css$/)) {
-            return name === 'style.css' ? 'css/app.css' : 'css/[name].css'
+            return name === 'style.css'
+              ? 'static/css/app.css'
+              : 'static/css/[name].css'
           }
           if (name.match(/\.(png|jpe?g|gif|svg|webp|avif)$/)) {
-            return 'img/[name].[hash].[ext]'
+            return 'static/img/[name].[hash].[ext]'
           }
           if (name.match(/\.(mp4|webm|ogg|mp3|wav|flac|aac)$/)) {
-            return 'media/[name].[ext]'
+            return 'static/media/[name].[ext]'
           }
-          return 'assets/[name].[ext]'
+          return 'static/[name].[ext]'
         }
         // manualChunks(id) {
         //   if (id.includes('node_modules')) return 'vendor'

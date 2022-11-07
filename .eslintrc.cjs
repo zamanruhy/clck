@@ -26,6 +26,7 @@ module.exports = {
     'no-unused-vars': 'off',
 
     'no-empty-pattern': 'off',
+    'no-inner-declarations': 'off',
     '@typescript-eslint/no-unused-vars': 'off'
     // '@typescript-eslint/no-non-null-assertion': 'off',
     // '@typescript-eslint/no-unsafe-assignment': 'off',

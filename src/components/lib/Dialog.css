@@ -1,0 +1,114 @@
+.dialog {
+  scrollbar-gutter: both-edges stable;
+  position: fixed;
+  inset: 0px;
+  z-index: 2000;
+  display: flex;
+  overflow-x: hidden;
+  /* padding: 8px; */
+  outline-width: 0px;
+
+  &__wrapper {
+    margin: auto;
+    min-width: 0;
+
+    /* &_enter {
+      transition-property: transform, opacity;
+      transition-duration: 200ms;
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    &_leave {
+      transition-property: transform, opacity;
+      transition-duration: 150ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+    &_out {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    &_in {
+      opacity: 1;
+      transform: scale(1);
+    } */
+  }
+  &_stories &__wrapper {
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+
+    &_enter {
+      transition-property: transform, opacity;
+      transition-duration: 100ms;
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+    &_leave {
+      transition-property: transform, opacity;
+      transition-duration: 100ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+    &_out {
+      opacity: 0;
+      transform: scale(0.9) translateY(40px);
+    }
+    &_in {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  &__content {
+    position: relative;
+    width: var(--max-width);
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* background-color: #ffffff; */
+  }
+  &_stories &__content {
+    width: auto;
+  }
+}
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0px;
+  z-index: 2000;
+  background-color: rgba(0, 0, 0, 0.7);
+
+  /* &_enter {
+    transition-property: opacity;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &_leave {
+    transition-property: opacity;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &_out {
+    opacity: 0;
+  }
+  &_in {
+    opacity: 1;
+  } */
+
+  &_stories {
+    background-color: hsl(0 0% 16%);
+  }
+
+  &_stories&_enter {
+    transition-property: opacity;
+    transition-duration: 100ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &_stories&_leave {
+    transition-property: opacity;
+    transition-duration: 100ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  &_stories&_out {
+    opacity: 0;
+  }
+  &_stories&_in {
+    opacity: 1;
+  }
+}

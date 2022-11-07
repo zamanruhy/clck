@@ -4,9 +4,8 @@
 .app {
   margin-left: auto;
   margin-right: auto;
-  box-sizing: content-box;
-  max-width: 328px;
-  padding: 0 20px;
+  max-width: var(--max-width);
+  padding: 0 var(--padding-x);
   display: flex;
   flex-direction: column;
   min-height: 100%;

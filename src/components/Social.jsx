@@ -15,7 +15,7 @@ export default function Social() {
         >
           <VkIcon
             class="social__icon"
-            style="height: 12px; left: -1px; top: 1px"
+            style="height: 12px; top: 1px"
             aria-hidden="true"
           />
         </a>
