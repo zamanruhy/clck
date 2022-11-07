@@ -36,26 +36,26 @@
     <script>
       window.data = {
         meta: {
-          ava: "/static/img/ava.avif",
+          ava: "static/img/ava.avif",
           username: "a-petrova",
           time: "4 ч.",
         },
         stories: [
           {
             type: "video",
-            src: "/static/stories/race.mp4",
+            src: "static/stories/race.mp4",
           },
           {
             type: "image",
-            src: "/static/stories/spacex.avif",
+            src: "static/stories/spacex.avif",
           },
           {
             type: "video",
-            src: "/static/stories/soccer.mp4",
+            src: "static/stories/soccer.mp4",
           },
           {
             type: "image",
-            src: "/static/stories/chemistry.avif",
+            src: "static/stories/chemistry.avif",
           },
         ],
       };
@@ -69,12 +69,7 @@
               style="background-image: conic-gradient(#33f7f7 5%, #b7ff01, #33f7f7 95%)"
             ></div>
             <button type="button" class="ava__picture" aria-label="Открыть сторис">
-              <img
-                src="/static/img/ava.avif"
-                alt="Avatar"
-                class="ava__media"
-                fetchpriority="high"
-              /><video class="ava__media" autoplay muted loop></video>
+              <img src="static/img/ava.avif" alt="Avatar" class="ava__media" fetchpriority="high" />
             </button>
           </div>
           <button type="button" class="ava__share" aria-label="Поделиться">
