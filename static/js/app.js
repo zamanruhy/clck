@@ -484,7 +484,7 @@ function useProgress(animate, duration) {
   });
   return progress;
 }
-const _tmpl$$4 = /* @__PURE__ */ template(`<video playsinline></video>`);
+const _tmpl$$4 = /* @__PURE__ */ template(`<video muted playsinline disablepictureinpicture></video>`);
 function Video(props) {
   let el;
   const [loaded, setLoaded] = createSignal(false);
@@ -591,6 +591,64 @@ function Story(props) {
     return _el$;
   })();
 }
+function useSwipe(options = {}) {
+  const [ref, setRef] = createSignal(null);
+  createEffect(() => {
+    if (!ref())
+      return;
+    var el = ref(), startX, startY, startTime, threshold = 150, restraint = 100, allowedTime = 300;
+    function onPointerDown(e) {
+      if (e.pointerType !== "touch")
+        return;
+      el.setPointerCapture(e.pointerId);
+      startX = e.clientX;
+      startY = e.clientY;
+      startTime = Date.now();
+      e.preventDefault();
+    }
+    function onPointerMove(e) {
+      if (e.pointerType !== "touch")
+        return;
+      e.preventDefault();
+    }
+    function onPointerUp(e) {
+      var _a, _b, _c, _d, _e;
+      if (e.pointerType !== "touch")
+        return;
+      const deltaX = e.clientX - startX;
+      const deltaY = e.clientY - startY;
+      const elapsedTime = Date.now() - startTime;
+      let dir = "none";
+      if (elapsedTime <= allowedTime) {
+        if (Math.abs(deltaX) >= threshold && Math.abs(deltaY) <= restraint) {
+          dir = deltaX < 0 ? "left" : "right";
+        } else if (Math.abs(deltaY) >= threshold && Math.abs(deltaX) <= restraint) {
+          dir = deltaY < 0 ? "up" : "down";
+        }
+      }
+      if (dir === "left")
+        (_a = options.onSwipedLeft) == null ? void 0 : _a.call(options);
+      else if (dir === "right")
+        (_b = options.onSwipedRight) == null ? void 0 : _b.call(options);
+      else if (dir === "up")
+        (_c = options.onSwipedUp) == null ? void 0 : _c.call(options);
+      else if (dir === "down")
+        (_d = options.onSwipedDown) == null ? void 0 : _d.call(options);
+      if (dir !== "none")
+        (_e = options.onSwiped) == null ? void 0 : _e.call(options, { dir });
+      e.preventDefault();
+    }
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", onPointerUp);
+    onCleanup(() => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", onPointerUp);
+    });
+  });
+  return setRef;
+}
 const _tmpl$ = /* @__PURE__ */ template(`<div class="stories"><div class="stories__header"><div class="stories__bars"></div><div class="stories__row"><div class="stories__user"><img alt="" class="stories__ava"><h3 class="stories__username"></h3><time class="stories__time"></time></div><button type="button" class="stories__close" aria-label="\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u0441\u0442\u043E\u0440\u0438\u0441"></button></div></div><div class="stories__overlay"></div></div>`), _tmpl$2 = /* @__PURE__ */ template(`<div class="stories__bar"></div>`);
 function Stories(props) {
   const [, rest] = splitProps(props, ["ava", "username", "time", "stories", "onOpen", "onOpened", "onClose", "onClosed"]);
@@ -599,6 +657,18 @@ function Stories(props) {
   const [progress, setProgress] = createSignal(0);
   const [opened, setOpened] = createSignal(false);
   let timer = null;
+  const setRef = useSwipe({
+    onSwiped({
+      dir
+    }) {
+    },
+    onSwipedRight: prev,
+    onSwipedLeft: next,
+    onSwipedDown() {
+      var _a;
+      (_a = props.onRequestClose) == null ? void 0 : _a.call(props);
+    }
+  });
   function next() {
     setIndex((index() + 1) % props.stories.length);
   }
@@ -614,14 +684,20 @@ function Stories(props) {
     }
   }
   function onPointerDown(e) {
+    if (e.pointerType === "touch")
+      return;
+    e.target.setPointerCapture(e.pointerId);
     if (playing()) {
       timer = setTimeout(() => {
         setPlaying(false);
         timer = null;
       }, 150);
     }
+    e.preventDefault();
   }
   function onPointerUp(e) {
+    if (e.pointerType === "touch")
+      return;
     if (timer) {
       clearTimeout(timer);
       timer = null;
@@ -633,6 +709,7 @@ function Stories(props) {
       }
     }
     setPlaying(true);
+    e.preventDefault();
   }
   return createComponent(Dialog, mergeProps(rest, {
     variant: "stories",
@@ -680,6 +757,7 @@ function Stories(props) {
       insert(_el$9, createComponent(CloseIcon, {
         "aria-hidden": "true"
       }));
+      setRef(_el$10);
       _el$10.$$pointerup = onPointerUp;
       _el$10.$$pointerdown = onPointerDown;
       insert(_el$, createComponent(Show, {
@@ -705,7 +783,7 @@ async function script$1() {
   const el = document.querySelector(".ava");
   if (!el)
     return;
-  const stories = ((_a = window == null ? void 0 : window.data) == null ? void 0 : _a.stories) || [];
+  const stories = ((_a = window.data) == null ? void 0 : _a.stories) || [];
   if (!stories.length) {
     el.classList.add("ava_empty");
   }
@@ -724,13 +802,15 @@ async function script$1() {
   {
     render(() => createComponent(Stories, mergeProps(() => {
       var _a2;
-      return (_a2 = window == null ? void 0 : window.data) == null ? void 0 : _a2.meta;
+      return (_a2 = window.data) == null ? void 0 : _a2.meta;
     }, {
       stories,
       get open() {
         return open();
       },
-      onRequestClose: () => setOpen(false)
+      onRequestClose: () => setOpen(false),
+      onOpen: () => videoEl == null ? void 0 : videoEl.pause(),
+      onClose: () => videoEl == null ? void 0 : videoEl.play()
     })), storiesEl);
   }
 }

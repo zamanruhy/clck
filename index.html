@@ -73,8 +73,17 @@
                 src="static/img/ava.avif"
                 alt="Avatar"
                 class="ava__media"
+                aria-hidden="true"
                 fetchpriority="high"
-              /><video class="ava__media" autoplay muted loop></video>
+              /><video
+                class="ava__media"
+                autoplay
+                muted
+                loop
+                playsinline
+                disablepictureinpicture
+                aria-hidden="true"
+              ></video>
             </button>
           </div>
           <button type="button" class="ava__share" aria-label="Поделиться">

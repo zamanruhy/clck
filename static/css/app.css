@@ -379,6 +379,7 @@ video {
     border-radius: inherit;
     -o-object-fit: cover;
        object-fit: cover;
+    pointer-events: none;
   }
 
   .ava__media:is(video) {
@@ -675,6 +676,7 @@ video {
     right: 0;
     bottom: 0;
     z-index: 100;
+    touch-action: none;
   }
 .spinner {
   position: relative;
@@ -855,6 +857,7 @@ video {
     display: flex;
     align-items: center;
     justify-content: center;
+    pointer-events: none;
   }
 
   .request__addon-icon {
