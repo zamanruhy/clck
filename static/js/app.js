@@ -596,7 +596,7 @@ function useSwipe(options = {}) {
   createEffect(() => {
     if (!ref())
       return;
-    var el = ref(), startX, startY, startTime, threshold = 150, restraint = 100, allowedTime = 300;
+    var el = ref(), startX, startY, startTime, threshold = 100, restraint = threshold * 0.5, allowedTime = 250;
     function onPointerDown(e) {
       if (e.pointerType !== "touch")
         return;
@@ -798,7 +798,10 @@ async function script$1() {
   const [open, setOpen] = createSignal(false);
   const storiesEl = el.querySelector(".ava__stories");
   const pictureEl = el.querySelector(".ava__picture");
-  pictureEl.addEventListener("click", () => setOpen(true));
+  pictureEl.addEventListener("click", () => {
+    setOpen(true);
+    console.log("clicked");
+  });
   {
     render(() => createComponent(Stories, mergeProps(() => {
       var _a2;
