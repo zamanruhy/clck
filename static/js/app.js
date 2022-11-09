@@ -1,4 +1,4 @@
-import { c as createSignal, a as createEffect, b as createComponent, D as Dynamic, m as mergeProps, S as Show, d as createContext, u as useContext, e as delegateEvents, s as splitProps, f as createMemo, o as onMount, g as onCleanup, h as spread, i as insert, j as createRenderEffect, k as classList, t as template, l as setAttribute, n as style, p as memo, q as addEventListener, F as For, r as render } from "./vendor.js";
+import { c as createSignal, a as createEffect, b as createComponent, D as Dynamic, m as mergeProps, S as Show, d as createContext, u as useContext, e as delegateEvents, s as splitProps, f as createMemo, o as onMount, g as onCleanup, h as spread, i as insert, j as createRenderEffect, k as classList, t as template, l as setAttribute, n as style, p as memo, q as addEventListener, F as For, r as render, I as IMask } from "./vendor.js";
 const main = "";
 const About = "";
 const Ava = "";
@@ -899,8 +899,11 @@ function script() {
     return;
   el.querySelector(".request__form");
   const inputEl = el.querySelector(".request__input");
-  if (inputEl.type === "tel")
-    ;
+  if (inputEl.type === "tel") {
+    IMask(inputEl, {
+      mask: "+{7} 000 000 00-00"
+    });
+  }
 }
 {
   script();
