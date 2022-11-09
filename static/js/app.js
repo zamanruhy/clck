@@ -484,11 +484,38 @@ function Image(props) {
     return _el$;
   })();
 }
+function useVideoProgress() {
+  const [ref, setRef] = createSignal(null);
+  const [progress, setProgress] = createSignal(0);
+  createEffect(() => {
+    const el = ref();
+    if (el) {
+      let onTimeUpdate = function() {
+        cancelAnimationFrame(rafId);
+        if (!el.paused) {
+          rafId = requestAnimationFrame(onTimeUpdate);
+        }
+        calcProgress();
+      }, calcProgress = function() {
+        if (el.duration) {
+          setProgress(el.currentTime / el.duration);
+        }
+      };
+      let rafId = null;
+      el.addEventListener("timeupdate", onTimeUpdate);
+      onCleanup(() => {
+        cancelAnimationFrame(rafId);
+        el.removeEventListener("timeupdate", onTimeUpdate);
+      });
+    }
+  });
+  return [setRef, progress];
+}
 const _tmpl$$4 = /* @__PURE__ */ template(`<video muted playsinline disablepictureinpicture></video>`);
 function Video(props) {
   let el;
   const [loaded, setLoaded] = createSignal(false);
-  const [progress, setProgress] = createSignal(0);
+  const [setRef, progress] = useVideoProgress();
   createEffect(() => {
     var _a;
     return (_a = props.onProgress) == null ? void 0 : _a.call(props, progress());
@@ -496,17 +523,14 @@ function Video(props) {
   createEffect(() => props.playing && loaded() ? el.play() : el.pause());
   return (() => {
     const _el$ = _tmpl$$4.cloneNode(true);
-    const _ref$ = el;
-    typeof _ref$ === "function" ? _ref$(_el$) : el = _el$;
+    ((node) => {
+      el = node;
+      setRef(node);
+    })(_el$);
     _el$.addEventListener("canplaythrough", (e) => {
       var _a;
       (_a = props.onLoad) == null ? void 0 : _a.call(props);
       setLoaded(true);
-    });
-    _el$.addEventListener("timeupdate", (e) => {
-      if (el.duration) {
-        setProgress(el.currentTime / el.duration);
-      }
     });
     createRenderEffect(() => setAttribute(_el$, "src", props.src));
     return _el$;
@@ -576,7 +600,7 @@ function Story(props) {
       get fallback() {
         return createComponent(Spinner, {
           "class": "story__spinner",
-          size: 40,
+          size: 36,
           thickness: 2
         });
       },
@@ -648,7 +672,7 @@ function useSwipe(options = {}) {
   });
   return setRef;
 }
-const _tmpl$ = /* @__PURE__ */ template(`<div class="stories"><div class="stories__header"><div class="stories__bars"></div><div class="stories__row"><div class="stories__user"><img alt="" class="stories__ava"><h3 class="stories__username"></h3><time class="stories__time"></time></div><button type="button" class="stories__close" aria-label="\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u0441\u0442\u043E\u0440\u0438\u0441"></button></div></div><div class="stories__overlay"></div></div>`), _tmpl$2 = /* @__PURE__ */ template(`<div class="stories__bar"></div>`);
+const _tmpl$ = /* @__PURE__ */ template(`<div class="stories"><div class="stories__header"><div class="stories__bars"></div><div class="stories__row"><div class="stories__user"><img alt="" class="stories__ava"><div class="stories__info"><h3 class="stories__username"></h3><time class="stories__time"></time></div></div><button type="button" class="stories__close" aria-label="\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u0441\u0442\u043E\u0440\u0438\u0441"></button></div></div><div class="stories__overlay"></div></div>`), _tmpl$2 = /* @__PURE__ */ template(`<div class="stories__bar"></div>`);
 function Stories(props) {
   const [, rest] = splitProps(props, ["ava", "username", "time", "stories", "onOpen", "onOpened", "onClose", "onClosed"]);
   const [index, setIndex] = createSignal(0);
@@ -677,7 +701,7 @@ function Stories(props) {
   function onStoryProgress(value) {
     setProgress(value);
     if (value === 1) {
-      setTimeout(next, 50);
+      next();
     }
   }
   function onPointerDown(e) {
@@ -742,30 +766,30 @@ function Stories(props) {
       (_a = props.onClosed) == null ? void 0 : _a.call(props);
     },
     get children() {
-      const _el$ = _tmpl$.cloneNode(true), _el$2 = _el$.firstChild, _el$3 = _el$2.firstChild, _el$4 = _el$3.nextSibling, _el$5 = _el$4.firstChild, _el$6 = _el$5.firstChild, _el$7 = _el$6.nextSibling, _el$8 = _el$7.nextSibling, _el$9 = _el$5.nextSibling, _el$10 = _el$2.nextSibling;
+      const _el$ = _tmpl$.cloneNode(true), _el$2 = _el$.firstChild, _el$3 = _el$2.firstChild, _el$4 = _el$3.nextSibling, _el$5 = _el$4.firstChild, _el$6 = _el$5.firstChild, _el$7 = _el$6.nextSibling, _el$8 = _el$7.firstChild, _el$9 = _el$8.nextSibling, _el$10 = _el$5.nextSibling, _el$11 = _el$2.nextSibling;
       insert(_el$3, createComponent(For, {
         get each() {
           return props.stories;
         },
         children: (_, i) => (() => {
-          const _el$11 = _tmpl$2.cloneNode(true);
-          createRenderEffect(() => _el$11.style.setProperty("--progress", i() < index() ? 1 : i() === index() ? progress() : 0));
-          return _el$11;
+          const _el$12 = _tmpl$2.cloneNode(true);
+          createRenderEffect(() => _el$12.style.setProperty("--progress", i() < index() ? 1 : i() === index() ? progress() : 0));
+          return _el$12;
         })()
       }));
-      insert(_el$7, () => props.username);
-      insert(_el$8, () => props.time);
-      _el$9.$$click = () => {
+      insert(_el$8, () => props.username);
+      insert(_el$9, () => props.time);
+      _el$10.$$click = () => {
         var _a;
         return (_a = props.onRequestClose) == null ? void 0 : _a.call(props);
       };
-      insert(_el$9, createComponent(CloseIcon, {
+      insert(_el$10, createComponent(CloseIcon, {
         "aria-hidden": "true"
       }));
-      setRef(_el$10);
-      _el$10.$$click = onTouchClick;
-      _el$10.$$pointerup = onPointerUp;
-      _el$10.$$pointerdown = onPointerDown;
+      setRef(_el$11);
+      _el$11.$$click = onTouchClick;
+      _el$11.$$pointerup = onPointerUp;
+      _el$11.$$pointerdown = onPointerDown;
       insert(_el$, createComponent(Show, {
         get when() {
           return memo(() => !!opened(), true)() && props.stories[index()];
