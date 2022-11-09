@@ -40,9 +40,9 @@
         username: "a-petrova",
         time: "4 ч.",
         share: {
-          title: "MDN",
-          text: "Learn web development on MDN!",
-          url: "https://developer.mozilla.org",
+          title: document.title,
+          text: document.querySelector("meta[name='description']").content,
+          url: window.location.href,
         },
         stories: [
           {
