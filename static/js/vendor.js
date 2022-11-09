@@ -4389,6 +4389,7 @@ export {
   style as n,
   onMount as o,
   memo as p,
+  addEventListener as q,
   render as r,
   splitProps as s,
   template as t,

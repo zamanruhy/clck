@@ -1,4 +1,4 @@
-import { c as createSignal, a as createEffect, b as createComponent, D as Dynamic, m as mergeProps, S as Show, d as createContext, u as useContext, e as delegateEvents, s as splitProps, f as createMemo, o as onMount, g as onCleanup, h as spread, i as insert, j as createRenderEffect, k as classList, t as template, l as setAttribute, n as style, F as For, p as memo, r as render, I as IMask } from "./vendor.js";
+import { c as createSignal, a as createEffect, b as createComponent, D as Dynamic, m as mergeProps, S as Show, d as createContext, u as useContext, e as delegateEvents, s as splitProps, f as createMemo, o as onMount, g as onCleanup, h as spread, i as insert, j as createRenderEffect, k as classList, t as template, l as setAttribute, n as style, p as memo, q as addEventListener, F as For, r as render, I as IMask } from "./vendor.js";
 const main = "";
 const About = "";
 const Ava = "";
@@ -300,7 +300,7 @@ function trapFocus(e) {
   }
 }
 const Dialog$1 = "";
-const _tmpl$$7 = /* @__PURE__ */ template(`<div class="dialog__content"></div>`), _tmpl$2$2 = /* @__PURE__ */ template(`<div class="dialog" role="dialog" aria-modal="true" tabindex="-1"></div>`);
+const _tmpl$$8 = /* @__PURE__ */ template(`<div class="dialog__content"></div>`), _tmpl$2$2 = /* @__PURE__ */ template(`<div class="dialog" role="dialog" aria-modal="true" tabindex="-1"></div>`);
 function Dialog(props) {
   props = mergeProps({
     open: false,
@@ -410,7 +410,7 @@ function Dialog(props) {
           beforeLeave: onBeforeLeave,
           afterLeave: onAfterLeave,
           get children() {
-            const _el$2 = _tmpl$$7.cloneNode(true);
+            const _el$2 = _tmpl$$8.cloneNode(true);
             const _ref$2 = contentEl;
             typeof _ref$2 === "function" ? _ref$2(_el$2) : contentEl = _el$2;
             insert(_el$2, () => props.children);
@@ -429,9 +429,9 @@ function Dialog(props) {
 }
 delegateEvents(["click", "keydown"]);
 const Stories$1 = "";
-const _tmpl$$6 = /* @__PURE__ */ template(`<svg viewBox="0 0 22 22" fill="currentColor"><path d="m17.42 5.88-1.3-1.3L11 9.71 5.88 4.58l-1.3 1.3L9.71 11l-5.13 5.12 1.3 1.3L11 12.29l5.12 5.13 1.3-1.3L12.29 11l5.13-5.12Z"></path></svg>`);
+const _tmpl$$7 = /* @__PURE__ */ template(`<svg viewBox="0 0 22 22" fill="currentColor"><path d="m17.42 5.88-1.3-1.3L11 9.71 5.88 4.58l-1.3 1.3L9.71 11l-5.13 5.12 1.3 1.3L11 12.29l5.12 5.13 1.3-1.3L12.29 11l5.13-5.12Z"></path></svg>`);
 const CloseIcon = (props = {}) => (() => {
-  const _el$ = _tmpl$$6.cloneNode(true);
+  const _el$ = _tmpl$$7.cloneNode(true);
   spread(_el$, props, true, true);
   return _el$;
 })();
@@ -464,7 +464,7 @@ function useProgress(animate, duration) {
   });
   return progress;
 }
-const _tmpl$$5 = /* @__PURE__ */ template(`<img alt="#">`);
+const _tmpl$$6 = /* @__PURE__ */ template(`<img alt="#">`);
 function Image(props) {
   const [loaded, setLoaded] = createSignal(false);
   const animate = createMemo(() => props.playing && loaded());
@@ -474,7 +474,7 @@ function Image(props) {
     return (_a = props.onProgress) == null ? void 0 : _a.call(props, progress());
   });
   return (() => {
-    const _el$ = _tmpl$$5.cloneNode(true);
+    const _el$ = _tmpl$$6.cloneNode(true);
     _el$.addEventListener("load", () => {
       var _a;
       (_a = props.onLoad) == null ? void 0 : _a.call(props);
@@ -511,7 +511,7 @@ function useVideoProgress() {
   });
   return [setRef, progress];
 }
-const _tmpl$$4 = /* @__PURE__ */ template(`<video muted playsinline disablepictureinpicture></video>`);
+const _tmpl$$5 = /* @__PURE__ */ template(`<video playsinline disablepictureinpicture></video>`);
 function Video(props) {
   let el;
   const [loaded, setLoaded] = createSignal(false);
@@ -522,7 +522,7 @@ function Video(props) {
   });
   createEffect(() => props.playing && loaded() ? el.play() : el.pause());
   return (() => {
-    const _el$ = _tmpl$$4.cloneNode(true);
+    const _el$ = _tmpl$$5.cloneNode(true);
     ((node) => {
       el = node;
       setRef(node);
@@ -537,7 +537,7 @@ function Video(props) {
   })();
 }
 const Spinner$1 = "";
-const _tmpl$$3 = /* @__PURE__ */ template(`<div class="spinner" role="progressbar"><svg class="spinner__svg" fill="transparent"><circle class="spinner__circle" cx="50%" cy="50%" stroke="currentColor"></circle><circle class="spinner__circle " cx="50%" cy="50%" stroke="currentColor" pathLength="1" stroke-dasharray="0.4 0.6"></circle></svg></div>`);
+const _tmpl$$4 = /* @__PURE__ */ template(`<div class="spinner" role="progressbar"><svg class="spinner__svg" fill="transparent"><circle class="spinner__circle" cx="50%" cy="50%" stroke="currentColor"></circle><circle class="spinner__circle " cx="50%" cy="50%" stroke="currentColor" pathLength="1" stroke-dasharray="0.4 0.6"></circle></svg></div>`);
 function Spinner(props) {
   props = mergeProps({
     size: 40,
@@ -545,7 +545,7 @@ function Spinner(props) {
   }, props);
   const [, rest] = splitProps(props, ["size", "thickness", "class", "classList", "style"]);
   return (() => {
-    const _el$ = _tmpl$$3.cloneNode(true), _el$2 = _el$.firstChild, _el$3 = _el$2.firstChild, _el$4 = _el$3.nextSibling;
+    const _el$ = _tmpl$$4.cloneNode(true), _el$2 = _el$.firstChild, _el$3 = _el$2.firstChild, _el$4 = _el$3.nextSibling;
     spread(_el$, rest, false, true);
     createRenderEffect((_p$) => {
       const _v$ = {
@@ -574,23 +574,24 @@ function Spinner(props) {
     return _el$;
   })();
 }
-const _tmpl$$2 = /* @__PURE__ */ template(`<svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.5 16.67 18.07 10 2.5 3.33v5.19L13.61 10 2.5 11.48v5.19Z"></path></svg>`);
+const _tmpl$$3 = /* @__PURE__ */ template(`<svg viewBox="0 0 20 20" fill="currentColor"><path d="M2.5 16.67 18.07 10 2.5 3.33v5.19L13.61 10 2.5 11.48v5.19Z"></path></svg>`);
 const SendIcon = (props = {}) => (() => {
-  const _el$ = _tmpl$$2.cloneNode(true);
+  const _el$ = _tmpl$$3.cloneNode(true);
   spread(_el$, props, true, true);
   return _el$;
 })();
 const Story$1 = "";
-const _tmpl$$1 = /* @__PURE__ */ template(`<button type="button" class="story__button">\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0437\u0430\u044F\u0432\u043A\u0443 </button>`), _tmpl$2$1 = /* @__PURE__ */ template(`<div class="story"></div>`);
+const _tmpl$$2 = /* @__PURE__ */ template(`<div class="story"></div>`), _tmpl$2$1 = /* @__PURE__ */ template(`<a target="_blank" class="story__button">\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0437\u0430\u044F\u0432\u043A\u0443 </a>`), _tmpl$3 = /* @__PURE__ */ template(`<button type="button" class="story__button">\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0437\u0430\u044F\u0432\u043A\u0443 </button>`);
 function Story(props) {
+  const [, rest] = splitProps(props, ["onRequestForm"]);
   const [loaded, setLoaded] = createSignal(false);
   return (() => {
-    const _el$ = _tmpl$2$1.cloneNode(true);
+    const _el$ = _tmpl$$2.cloneNode(true);
     insert(_el$, createComponent(Dynamic, mergeProps({
       get component() {
         return props.type === "image" ? Image : Video;
       }
-    }, props, {
+    }, rest, {
       onLoad: () => setLoaded(true)
     })), null);
     insert(_el$, createComponent(Show, {
@@ -605,15 +606,25 @@ function Story(props) {
         });
       },
       get children() {
-        const _el$2 = _tmpl$$1.cloneNode(true);
-        _el$2.firstChild;
-        insert(_el$2, createComponent(SendIcon, {}), null);
-        return _el$2;
+        return memo(() => !!props.link, true)() ? (() => {
+          const _el$2 = _tmpl$2$1.cloneNode(true);
+          _el$2.firstChild;
+          insert(_el$2, createComponent(SendIcon, {}), null);
+          createRenderEffect(() => setAttribute(_el$2, "href", props.link));
+          return _el$2;
+        })() : (() => {
+          const _el$4 = _tmpl$3.cloneNode(true);
+          _el$4.firstChild;
+          addEventListener(_el$4, "click", props.onRequestForm, true);
+          insert(_el$4, createComponent(SendIcon, {}), null);
+          return _el$4;
+        })();
       }
     }), null);
     return _el$;
   })();
 }
+delegateEvents(["click"]);
 function useSwipe(options = {}) {
   const [ref, setRef] = createSignal(null);
   createEffect(() => {
@@ -672,6 +683,28 @@ function useSwipe(options = {}) {
   });
   return setRef;
 }
+const Form$1 = "";
+const _tmpl$$1 = /* @__PURE__ */ template(`<div class="form"></div>`);
+function Form(props) {
+  function onInsert(node) {
+    const requestEl = document.querySelector(".request");
+    const parentEl = requestEl.parentElement;
+    node.appendChild(requestEl);
+    onCleanup(() => {
+      parentEl.appendChild(requestEl);
+    });
+  }
+  return createComponent(Dialog, mergeProps({
+    variant: "form"
+  }, props, {
+    get children() {
+      const _el$ = _tmpl$$1.cloneNode(true);
+      const _ref$ = onInsert;
+      typeof _ref$ === "function" ? _ref$(_el$) : onInsert = _el$;
+      return _el$;
+    }
+  }));
+}
 const _tmpl$ = /* @__PURE__ */ template(`<div class="stories"><div class="stories__header"><div class="stories__bars"></div><div class="stories__row"><div class="stories__user"><img alt="" class="stories__ava"><div class="stories__info"><h3 class="stories__username"></h3><time class="stories__time"></time></div></div><button type="button" class="stories__close" aria-label="\u0417\u0430\u043A\u0440\u044B\u0442\u044C \u0441\u0442\u043E\u0440\u0438\u0441"></button></div></div><div class="stories__overlay"></div></div>`), _tmpl$2 = /* @__PURE__ */ template(`<div class="stories__bar"></div>`);
 function Stories(props) {
   const [, rest] = splitProps(props, ["ava", "username", "time", "stories", "onOpen", "onOpened", "onClose", "onClosed"]);
@@ -679,6 +712,7 @@ function Stories(props) {
   const [playing, setPlaying] = createSignal(true);
   const [progress, setProgress] = createSignal(0);
   const [opened, setOpened] = createSignal(false);
+  const [formOpen, setFormOpen] = createSignal(false);
   let timer = null;
   const setRef = useSwipe({
     onSwiped({
@@ -740,7 +774,7 @@ function Stories(props) {
       return;
     onClick(e);
   }
-  return createComponent(Dialog, mergeProps(rest, {
+  return [createComponent(Dialog, mergeProps(rest, {
     variant: "stories",
     closeOnBackdrop: false,
     onOpen: () => {
@@ -799,13 +833,21 @@ function Stories(props) {
           get playing() {
             return playing();
           },
-          onProgress: onStoryProgress
+          onProgress: onStoryProgress,
+          onRequestForm: () => setFormOpen(true)
         }))
       }), null);
       createRenderEffect(() => setAttribute(_el$6, "src", props.ava));
       return _el$;
     }
-  }));
+  })), createComponent(Form, {
+    get open() {
+      return formOpen();
+    },
+    onOpen: () => setPlaying(false),
+    onClose: () => setPlaying(true),
+    onRequestClose: () => setFormOpen(false)
+  })];
 }
 delegateEvents(["click", "pointerdown", "pointerup"]);
 async function script$1() {
@@ -825,11 +867,11 @@ async function script$1() {
       el.classList.add("ava_loaded");
     });
   }
-  const [open, setOpen] = createSignal(false);
+  const [storiesOpen, setStoriesOpen] = createSignal(false);
   const storiesEl = el.querySelector(".ava__stories");
   const pictureEl = el.querySelector(".ava__picture");
   pictureEl.addEventListener("click", (e) => {
-    setOpen(true);
+    setStoriesOpen(true);
     e.preventDefault();
   });
   {
@@ -839,9 +881,9 @@ async function script$1() {
     }, {
       stories,
       get open() {
-        return open();
+        return storiesOpen();
       },
-      onRequestClose: () => setOpen(false),
+      onRequestClose: () => setStoriesOpen(false),
       onOpen: () => videoEl == null ? void 0 : videoEl.pause(),
       onClose: () => videoEl == null ? void 0 : videoEl.play()
     })), storiesEl);

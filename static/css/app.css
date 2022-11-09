@@ -434,10 +434,15 @@ video {
   inset: 0px;
   z-index: 2000;
   display: flex;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
+  overflow: hidden;
   /* padding: 8px; */
   outline-width: 0px;
 }
+
+  .dialog_form {
+    padding: 16px;
+  }
 
   .dialog__wrapper {
     margin: auto;
@@ -489,6 +494,30 @@ video {
   .dialog_stories .dialog__wrapper_in {
       opacity: 1;
       transform: scale(1) translateY(0);
+    }
+
+  .dialog_form .dialog__wrapper {
+    margin-bottom: 0;
+  }
+
+  .dialog_form .dialog__wrapper_enter {
+      transition-property: transform;
+      transition-duration: 150ms;
+      transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+
+  .dialog_form .dialog__wrapper_leave {
+      transition-property: transform;
+      transition-duration: 100ms;
+      transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+    }
+
+  .dialog_form .dialog__wrapper_out {
+      transform: translateY(101%);
+    }
+
+  .dialog_form .dialog__wrapper_in {
+      transform: translateY(0);
     }
 
   .dialog__content {
@@ -549,6 +578,26 @@ video {
   }
 
 .dialog-backdrop_stories.dialog-backdrop_in {
+    opacity: 1;
+  }
+
+.dialog-backdrop_form.dialog-backdrop_enter {
+    transition-property: opacity;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+.dialog-backdrop_form.dialog-backdrop_leave {
+    transition-property: opacity;
+    transition-duration: 100ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+.dialog-backdrop_form.dialog-backdrop_out {
+    opacity: 0;
+  }
+
+.dialog-backdrop_form.dialog-backdrop_in {
     opacity: 1;
   }
 .stories {
@@ -805,6 +854,9 @@ video {
         display: none
     }
       }
+.form {
+  display: contents;
+}
 .request {
   color: #0a0522;
   border-radius: 20px;
