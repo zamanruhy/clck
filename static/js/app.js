@@ -1,4 +1,4 @@
-import { c as createSignal, a as createEffect, b as createComponent, D as Dynamic, m as mergeProps, S as Show, d as createContext, u as useContext, e as delegateEvents, s as splitProps, f as createMemo, o as onMount, g as onCleanup, h as spread, i as insert, j as createRenderEffect, k as classList, t as template, l as setAttribute, n as style, p as memo, F as For, r as render, I as IMask } from "./vendor.js";
+import { c as createSignal, a as createEffect, b as createComponent, D as Dynamic, m as mergeProps, S as Show, d as createContext, u as useContext, e as delegateEvents, s as splitProps, f as createMemo, o as onMount, g as onCleanup, h as spread, i as insert, j as createRenderEffect, k as classList, t as template, l as setAttribute, n as style, F as For, p as memo, r as render, I as IMask } from "./vendor.js";
 const main = "";
 const About = "";
 const Ava = "";
@@ -435,33 +435,13 @@ const CloseIcon = (props = {}) => (() => {
   spread(_el$, props, true, true);
   return _el$;
 })();
-const _tmpl$$5 = /* @__PURE__ */ template(`<img alt="#">`);
-function Image(props) {
-  const [loaded, setLoaded] = createSignal(false);
-  const animate = createMemo(() => props.playing && loaded());
-  const progress = useProgress(animate, 5e3);
-  createEffect(() => {
-    var _a;
-    return (_a = props.onProgress) == null ? void 0 : _a.call(props, progress());
-  });
-  return (() => {
-    const _el$ = _tmpl$$5.cloneNode(true);
-    _el$.addEventListener("load", () => {
-      var _a;
-      (_a = props.onLoad) == null ? void 0 : _a.call(props);
-      setLoaded(true);
-    });
-    createRenderEffect(() => setAttribute(_el$, "src", props.src));
-    return _el$;
-  })();
-}
 function useProgress(animate, duration) {
   const [progress, setProgress] = createSignal(0);
-  const getPlaying = () => typeof animate === "function" ? animate() : animate;
+  const getAnimate = () => typeof animate === "function" ? animate() : animate;
   const getDuration = () => typeof duration === "function" ? duration() : duration;
   let prevElapsed = 0;
   createEffect(() => {
-    if (getPlaying()) {
+    if (getAnimate()) {
       let step = function(timestamp) {
         if (!start)
           start = timestamp;
@@ -483,6 +463,26 @@ function useProgress(animate, duration) {
     }
   });
   return progress;
+}
+const _tmpl$$5 = /* @__PURE__ */ template(`<img alt="#">`);
+function Image(props) {
+  const [loaded, setLoaded] = createSignal(false);
+  const animate = createMemo(() => props.playing && loaded());
+  const progress = useProgress(animate, 5e3);
+  createEffect(() => {
+    var _a;
+    return (_a = props.onProgress) == null ? void 0 : _a.call(props, progress());
+  });
+  return (() => {
+    const _el$ = _tmpl$$5.cloneNode(true);
+    _el$.addEventListener("load", () => {
+      var _a;
+      (_a = props.onLoad) == null ? void 0 : _a.call(props);
+      setLoaded(true);
+    });
+    createRenderEffect(() => setAttribute(_el$, "src", props.src));
+    return _el$;
+  })();
 }
 const _tmpl$$4 = /* @__PURE__ */ template(`<video muted playsinline disablepictureinpicture></video>`);
 function Video(props) {
@@ -559,20 +559,19 @@ const SendIcon = (props = {}) => (() => {
 const Story$1 = "";
 const _tmpl$$1 = /* @__PURE__ */ template(`<button type="button" class="story__button">\u041E\u0441\u0442\u0430\u0432\u0438\u0442\u044C \u0437\u0430\u044F\u0432\u043A\u0443 </button>`), _tmpl$2$1 = /* @__PURE__ */ template(`<div class="story"></div>`);
 function Story(props) {
-  const [loading, setLoading] = createSignal(true);
+  const [loaded, setLoaded] = createSignal(false);
   return (() => {
     const _el$ = _tmpl$2$1.cloneNode(true);
-    insert(_el$, (() => {
-      const _c$ = memo(() => props.type === "image", true);
-      return () => _c$() ? createComponent(Image, mergeProps(props, {
-        onLoad: () => setLoading(false)
-      })) : createComponent(Video, mergeProps(props, {
-        onLoad: () => setLoading(false)
-      }));
-    })(), null);
+    insert(_el$, createComponent(Dynamic, mergeProps({
+      get component() {
+        return props.type === "image" ? Image : Video;
+      }
+    }, props, {
+      onLoad: () => setLoaded(true)
+    })), null);
     insert(_el$, createComponent(Show, {
       get when() {
-        return !loading();
+        return loaded();
       },
       get fallback() {
         return createComponent(Spinner, {
@@ -596,7 +595,7 @@ function useSwipe(options = {}) {
   createEffect(() => {
     if (!ref())
       return;
-    var el = ref(), startX, startY, startTime, threshold = 100, restraint = threshold * 0.5, allowedTime = 250;
+    var el = ref(), startX, startY, startTime, threshold = 50, allowedTime = 250;
     function onPointerDown(e) {
       if (e.pointerType !== "touch")
         return;
@@ -620,9 +619,9 @@ function useSwipe(options = {}) {
       const elapsedTime = Date.now() - startTime;
       let dir = "none";
       if (elapsedTime <= allowedTime) {
-        if (Math.abs(deltaX) >= threshold && Math.abs(deltaY) <= restraint) {
+        if (Math.abs(deltaX) >= threshold && Math.abs(deltaX) > Math.abs(deltaY)) {
           dir = deltaX < 0 ? "left" : "right";
-        } else if (Math.abs(deltaY) >= threshold && Math.abs(deltaX) <= restraint) {
+        } else if (Math.abs(deltaY) >= threshold && Math.abs(deltaY) > Math.abs(deltaX)) {
           dir = deltaY < 0 ? "up" : "down";
         }
       }
@@ -673,9 +672,7 @@ function Stories(props) {
     setIndex((index() + 1) % props.stories.length);
   }
   function prev() {
-    if (index() !== 0) {
-      setIndex((index() - 1) % props.stories.length);
-    }
+    setIndex((index() - 1 + props.stories.length) % props.stories.length);
   }
   function onStoryProgress(value) {
     setProgress(value);
@@ -684,7 +681,7 @@ function Stories(props) {
     }
   }
   function onPointerDown(e) {
-    if (e.pointerType === "touch")
+    if (e.pointerType === "touch" || e.button !== 0)
       return;
     e.target.setPointerCapture(e.pointerId);
     if (playing()) {
@@ -696,20 +693,28 @@ function Stories(props) {
     e.preventDefault();
   }
   function onPointerUp(e) {
-    if (e.pointerType === "touch")
+    if (e.pointerType === "touch" || e.button !== 0)
       return;
     if (timer) {
       clearTimeout(timer);
       timer = null;
-      const rect = e.currentTarget.getBoundingClientRect();
-      if (e.clientX - rect.left < rect.width / 2) {
-        prev();
-      } else {
-        next();
-      }
+      onClick(e);
     }
     setPlaying(true);
     e.preventDefault();
+  }
+  function onClick(e) {
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (e.clientX - rect.left < rect.width / 2) {
+      prev();
+    } else {
+      next();
+    }
+  }
+  function onTouchClick(e) {
+    if (e.pointerType !== "touch")
+      return;
+    onClick(e);
   }
   return createComponent(Dialog, mergeProps(rest, {
     variant: "stories",
@@ -758,6 +763,7 @@ function Stories(props) {
         "aria-hidden": "true"
       }));
       setRef(_el$10);
+      _el$10.$$click = onTouchClick;
       _el$10.$$pointerup = onPointerUp;
       _el$10.$$pointerdown = onPointerDown;
       insert(_el$, createComponent(Show, {
@@ -798,9 +804,9 @@ async function script$1() {
   const [open, setOpen] = createSignal(false);
   const storiesEl = el.querySelector(".ava__stories");
   const pictureEl = el.querySelector(".ava__picture");
-  pictureEl.addEventListener("click", () => {
+  pictureEl.addEventListener("click", (e) => {
     setOpen(true);
-    console.log("clicked");
+    e.preventDefault();
   });
   {
     render(() => createComponent(Stories, mergeProps(() => {
