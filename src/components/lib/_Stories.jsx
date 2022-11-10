@@ -10,7 +10,7 @@ import Dialog from './Dialog'
 import './Stories.css'
 import CloseIcon from '@/icons/close.svg?component'
 import Story from './Story'
-// import useSwipe from '@/hooks/use-swipe'
+import useSwipe from '@/hooks/use-swipe'
 import Form from './Form'
 
 export default function Stories(props) {
@@ -36,19 +36,19 @@ export default function Stories(props) {
   let timer = null
   // let maybeSwipe = false
 
-  // const setRef = useSwipe({
-  //   onSwiped({ dir }) {
-  //     // console.log(dir)
-  //   },
-  //   // onSwipeStart() {
-  //   //   setMaybeSwipe(true)
-  //   // },
-  //   onSwipedRight: prev,
-  //   onSwipedLeft: next,
-  //   onSwipedDown() {
-  //     props.onRequestClose?.()
-  //   }
-  // })
+  const setRef = useSwipe({
+    onSwiped({ dir }) {
+      // console.log(dir)
+    },
+    // onSwipeStart() {
+    //   setMaybeSwipe(true)
+    // },
+    onSwipedRight: prev,
+    onSwipedLeft: next,
+    onSwipedDown() {
+      props.onRequestClose?.()
+    }
+  })
 
   function next() {
     setIndex((index() + 1) % props.stories.length)
@@ -67,7 +67,47 @@ export default function Stories(props) {
     }
   }
 
+  function onPointerDown(e) {
+    if (e.pointerType === 'touch' || e.button !== 0) return
+    // e.target.setPointerCapture(e.pointerId)
+    if (playing()) {
+      timer = setTimeout(() => {
+        setPlaying(false)
+        timer = null
+      }, 150)
+    }
+    // e.preventDefault()
+  }
+
+  function onPointerUp(e) {
+    if (e.pointerType === 'touch' || e.button !== 0) return
+    if (timer) {
+      clearTimeout(timer)
+      timer = null
+      onClick(e)
+    }
+    setPlaying(true)
+    // e.preventDefault()
+  }
+
+  function onClick(e) {
+    console.log('onClick')
+    const rect = e.currentTarget.getBoundingClientRect()
+    if (e.clientX - rect.left < rect.width / 2) {
+      prev()
+    } else {
+      next()
+    }
+    e.preventDefault()
+  }
+
+  function onTouchClick(e) {
+    if (e.pointerType !== 'touch') return
+    onClick(e)
+  }
+
   const [height, setHeigth] = createSignal(0)
+
   onMount(() => {
     function onResize() {
       setHeigth(document.documentElement.clientHeight)
@@ -80,61 +120,9 @@ export default function Stories(props) {
     })
   })
 
-  var startX,
-    startY,
-    startTime,
-    threshold = 50,
-    allowedTime = 250
-
-  function onPointerDown(e) {
-    // console.log('onMouseDown')
-    e.target.setPointerCapture(e.pointerId)
-    startX = e.clientX
-    startY = e.clientY
-    startTime = Date.now()
-    e.preventDefault()
-  }
-
-  function onPointerMove(e) {
-    e.preventDefault()
-  }
-
-  function onPointerUp(e) {
-    const deltaX = e.clientX - startX
-    const deltaY = e.clientY - startY
-    const elapsedTime = Date.now() - startTime
-    let dir = 'none'
-    if (elapsedTime <= allowedTime) {
-      if (
-        Math.abs(deltaX) >= threshold &&
-        Math.abs(deltaX) > Math.abs(deltaY)
-      ) {
-        dir = deltaX < 0 ? 'left' : 'right'
-      } else if (
-        Math.abs(deltaY) >= threshold &&
-        Math.abs(deltaY) > Math.abs(deltaX)
-      ) {
-        dir = deltaY < 0 ? 'up' : 'down'
-      }
-    }
-    if (dir === 'left') next()
-    else if (dir === 'right') prev()
-    else if (dir === 'down') props.onRequestClose?.()
-    else onClick(e)
-
-    e.preventDefault()
-  }
-
-  function onClick(e) {
-    // console.log('onClick')
-    const rect = e.currentTarget.getBoundingClientRect()
-    if (e.clientX - rect.left < rect.width / 2) {
-      prev()
-    } else {
-      next()
-    }
-    e.preventDefault()
-  }
+  // function onInsert(node) {
+  //   setEl(node)
+  // }
 
   return (
     <>
@@ -197,11 +185,10 @@ export default function Stories(props) {
 
           <div
             class="stories__overlay"
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
+            // onPointerDown={onPointerDown}
+            // onPointerUp={onPointerUp}
             // onClick={onTouchClick}
-            // onTouchEnd={onClick}
+            onTouchEnd={onClick}
             // ref={setRef}
           >
             {/* <div class="stories__left" onClick={prev} />

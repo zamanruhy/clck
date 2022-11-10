@@ -3,40 +3,72 @@ import { render } from 'solid-js/web'
 import './Ava.css'
 import Stories from './lib/Stories'
 import ShareIcon from '../icons/share.svg?component'
+// import Form from './lib/Form'
 
 async function script() {
   const el = document.querySelector('.ava')
   if (!el) return
 
-  const stories = window?.data?.stories || []
+  const stories = window.data?.stories || []
 
   if (!stories.length) {
     el.classList.add('ava_empty')
   }
 
-  const videoEl = el.querySelector('video.ava__media')
+  const vidEl = el.querySelector('video.ava__media')
   const firstVideo = stories.find((v) => v.type === 'video')
 
-  if (videoEl && firstVideo) {
-    videoEl.src = firstVideo.src
-    videoEl.addEventListener('canplaythrough', () => {
+  if (vidEl && firstVideo) {
+    vidEl.src = firstVideo.src
+    vidEl.addEventListener('canplaythrough', () => {
       el.classList.add('ava_loaded')
     })
+    window.videoEl.src = window.videoEl._src = firstVideo.src
   }
 
-  const [open, setOpen] = createSignal(false)
+  const [storiesOpen, setStoriesOpen] = createSignal(false)
   const storiesEl = el.querySelector('.ava__stories')
   const pictureEl = el.querySelector('.ava__picture')
-  pictureEl.addEventListener('click', () => setOpen(true))
+
+  pictureEl.addEventListener('click', (e) => {
+    e.preventDefault()
+    setStoriesOpen(true)
+  })
+
+  window.addEventListener(
+    'click',
+    () => {
+      // console.log('windowclick')
+      window.videoEl.play() //.then(() => window.videoEl.pause())
+    },
+    { once: true }
+  )
+
+  // // https://stackoverflow.com/questions/46483001/programmatically-play-video-with-sound-on-safari-and-mobile-chrome
+  // btn.onclick = (e) => {
+  //   vid.play().then(() => vid.pause()) // grants full access to the video
+  //   setTimeout(() => vid.play().catch(console.error), 5000)
+  // }
+
+  const shareEl = el.querySelector('.ava__share')
+  shareEl.addEventListener('click', async () => {
+    try {
+      await navigator.share(window.data?.share)
+    } catch (err) {
+      console.log(err)
+    }
+  })
 
   if (!import.meta.env.SSR) {
     render(
       () => (
         <Stories
-          {...window?.data?.meta}
+          {...window.data?.summary}
           stories={stories}
-          open={open()}
-          onRequestClose={() => setOpen(false)}
+          open={storiesOpen()}
+          onRequestClose={() => setStoriesOpen(false)}
+          onOpen={() => vidEl?.pause()}
+          onClose={() => vidEl?.play()}
         />
       ),
       storiesEl
@@ -58,14 +90,35 @@ export default function Ava() {
           class="ava__ring"
           style="background-image: conic-gradient(#33f7f7 5%, #b7ff01, #33f7f7 95%)"
         />
-        <button type="button" class="ava__picture" aria-label="Открыть сторис">
+        <button
+          type="button"
+          id="avaPicture"
+          class="ava__picture"
+          aria-label="Открыть сторис"
+        >
           <img
-            src="/static/img/ava.avif"
-            alt="Avatar"
+            src="static/img/ava.avif"
+            alt=""
             class="ava__media"
+            aria-hidden="true"
             fetchpriority="high"
           />
-          <video class="ava__media" autoplay muted loop></video>
+          <video
+            class="ava__media"
+            autoplay
+            muted
+            loop
+            playsinline
+            disablepictureinpicture
+            aria-hidden="true"
+          />
+          <video
+            id="videoEl"
+            preload
+            playsinline
+            disablepictureinpicture
+            // controls
+          />
         </button>
       </div>
       <button type="button" class="ava__share" aria-label="Поделиться">
@@ -75,78 +128,3 @@ export default function Ava() {
     </div>
   )
 }
-
-// import { createEffect, createSignal, onMount } from 'solid-js'
-// import customElement from '@/utils/custom-element'
-// import './Ava.css'
-// import Stories from './lib/Stories'
-// import ShareIcon from '../icons/share.svg?component'
-
-// function script() {
-//   const el = document.querySelector('.ava')
-//   if (!el) return
-
-//   const [open, setOpen] = createSignal(false)
-//   const stories = window.stories || []
-
-//   if (!stories.length) {
-//     el.classList.add('ava_empty')
-//   }
-
-//   const videoEl = el.querySelector('video.ava__media')
-//   const firstVideo = stories.find((v) => v.type === 'video')
-
-//   if (videoEl && firstVideo) {
-//     videoEl.src = firstVideo.src
-//     videoEl.addEventListener('canplaythrough', () => {
-//       el.classList.add('ava_loaded')
-//     })
-//   }
-
-//   const storiesEl = el.querySelector('app-stories')
-//   customElement('app-stories', Stories)
-//   storiesEl.solidProps.stories = window.stories || []
-//   storiesEl.solidProps.onRequestClose = () => setOpen(false)
-//   storiesEl.solidProps.onOpen = () => videoEl?.pause()
-//   storiesEl.solidProps.onClosed = () => videoEl?.play()
-//   createEffect(() => (storiesEl.solidProps.open = open()))
-
-//   const pictureEl = el.querySelector('.ava__picture')
-//   pictureEl.addEventListener('click', () => setOpen(true))
-// }
-
-// if (import.meta.env.PROD && !import.meta.env.SSR) {
-//   // script()
-// }
-
-// export default function Ava() {
-//   onMount(script)
-
-//   return (
-//     <div class="ava">
-//       <div class="ava__content">
-//         <div
-//           class="ava__ring"
-//           style="background-image: conic-gradient(#33f7f7 5%, #b7ff01, #33f7f7 95%)"
-//         />
-//         <button type="button" class="ava__picture" aria-label="Открыть сторис">
-//           <img
-//             src="/static/img/ava.avif"
-//             alt="Avatar"
-//             class="ava__media"
-//             fetchpriority="high"
-//           />
-//           <video class="ava__media" autoplay muted loop></video>
-//         </button>
-//       </div>
-//       <button type="button" class="ava__share" aria-label="Поделиться">
-//         <ShareIcon class="ava__share-icon" aria-hidden="true" />
-//       </button>
-//       <app-stories
-//         ava="/static/img/ava.avif"
-//         username="a-petrova"
-//         time="4 ч."
-//       />
-//     </div>
-//   )
-// }

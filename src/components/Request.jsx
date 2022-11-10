@@ -1,7 +1,6 @@
 import { onMount } from 'solid-js'
 import './Request.css'
-import IMask from 'imask'
-// import IMask from 'imask/esm/imask'
+import IMask from 'imask/esm/imask'
 import PhoneIcon from '@/icons/phone.svg?component'
 import SendIcon from '@/icons/send.svg?component'
 import ThumbUpIcon from '@/icons/thumb-up.svg?component'
@@ -17,6 +16,7 @@ function script() {
     const phoneMask = IMask(inputEl, {
       mask: '+{7} 000 000 00-00'
     })
+
     // formEl.addEventListener('submit', (e) => {
     //   if (!phoneMask.masked.isComplete) {
     //     e.preventDefault()
@@ -56,7 +56,7 @@ export default function Request() {
             name="phone"
             class="request__input"
             required
-            pattern="\\+7 \\d{3} \\d{3} \\d{2}-\\d{2}"
+            pattern="[+]7 [0-9]{3} [0-9]{3} [0-9]{2}-[0-9]{2}"
             placeholder="Ваш номер телефона"
             aria-describedby="form-note"
           />

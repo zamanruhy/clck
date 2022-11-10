@@ -1,4 +1,5 @@
-import { createSignal, onMount, Show } from 'solid-js'
+import { createSignal, Show, splitProps } from 'solid-js'
+import { Dynamic } from 'solid-js/web'
 import Image from './Image'
 import Video from './Video'
 import Spinner from './Spinner'
@@ -6,24 +7,35 @@ import SendIcon from '@/icons/send.svg?component'
 import './Story.css'
 
 export default function Story(props) {
-  // onMount(() => console.log('mounted'))
-  const [loading, setLoading] = createSignal(true)
+  const [, rest] = splitProps(props, ['onRequestForm'])
+
+  const [loaded, setLoaded] = createSignal(false)
 
   return (
     <div class="story">
-      {props.type === 'image' ? (
-        <Image {...props} onLoad={() => setLoading(false)} />
-      ) : (
-        <Video {...props} onLoad={() => setLoading(false)} />
-      )}
+      <Dynamic
+        component={props.type === 'image' ? Image : Video}
+        {...rest}
+        onLoad={() => setLoaded(true)}
+      />
 
       <Show
-        when={!loading()}
-        fallback={<Spinner class="story__spinner" size={40} thickness={2} />}
+        when={loaded()}
+        fallback={<Spinner class="story__spinner" size={36} thickness={2} />}
       >
-        <button type="button" class="story__button">
-          Оставить заявку <SendIcon />
-        </button>
+        {props.link ? (
+          <a href={props.link} target="_blank" class="story__button">
+            Оставить заявку <SendIcon />
+          </a>
+        ) : (
+          <button
+            type="button"
+            class="story__button"
+            onClick={props.onRequestForm}
+          >
+            Оставить заявку <SendIcon />
+          </button>
+        )}
       </Show>
     </div>
   )

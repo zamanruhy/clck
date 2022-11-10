@@ -67,7 +67,7 @@ export default defineConfig({
     // target: 'es2015',
     // manifest: true,
     assetsInlineLimit: 0,
-    minify: false,
+    minify: true,
     polyfillModulePreload: false,
     cssCodeSplit: false,
     rollupOptions: {
@@ -102,7 +102,7 @@ export default defineConfig({
   },
   ssr: {
     // Vite attempts to load this as a Commonjs dependency
-    noExternal: ['solid-meta', '@solidjs/router']
+    noExternal: ['solid-meta', '@solidjs/router', 'imask']
   },
   // assetsInclude: [/\/static\/.*$/],
   server: { port: 3000, strictPort: true },

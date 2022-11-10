@@ -15,7 +15,7 @@ module.exports = {
         }
       }
     }),
-    require('postcss-simple-vars'),
+    require('postcss-simple-vars')({ variables: { 'height-bp': '450px' } }),
     require('postcss-nested'),
     useRem
       ? require('postcss-pxtorem')({

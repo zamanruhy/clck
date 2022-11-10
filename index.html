@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <title>Clck</title>
     <meta name="description" content="Clck description" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <link rel="icon" href="favicon.ico" />
     <!--app-head-->
     <link
@@ -28,31 +31,41 @@
       type="font/woff2"
       crossorigin
     />
+    <link rel="preload" as="image" href="static/img/ava.avif" />
   </head>
   <body>
     <script>
       window.data = {
-        meta: {
-          ava: '/static/img/ava.avif',
+        share: {
+          title: document.title,
+          text: document.querySelector("meta[name='description']").content,
+          url: window.location.href
+        },
+        summary: {
+          ava: 'static/img/ava.avif',
           username: 'a-petrova',
           time: '4 ч.'
         },
         stories: [
           {
             type: 'video',
-            src: '/static/stories/race.mp4'
+            src: 'static/stories/race.mp4',
+            form: true
           },
           {
             type: 'image',
-            src: '/static/stories/spacex.avif'
+            src: 'static/stories/spacex.avif',
+            link: 'https://google.com'
           },
           {
             type: 'video',
-            src: '/static/stories/soccer.mp4'
+            src: 'static/stories/soccer.mp4',
+            form: true
           },
           {
             type: 'image',
-            src: '/static/stories/chemistry.avif'
+            src: 'static/stories/chemistry.avif',
+            link: 'https://google.com'
           }
         ]
       }

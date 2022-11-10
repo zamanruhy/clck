@@ -13,7 +13,9 @@ export default function Home() {
         <Social />
       </main>
       <footer class="footer">
-        <Request />
+        <div class="footer__request">
+          <Request />
+        </div>
         <a href="#" class="footer__copyright" aria-label="Сайт кликбар">
           <LogoIcon class="footer__logo" aria-hidden="true" />
         </a>
