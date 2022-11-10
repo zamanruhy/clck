@@ -39,13 +39,15 @@
   <body>
     <script>
       window.data = {
-        ava: "static/img/ava.avif",
-        username: "a-petrova",
-        time: "4 ч.",
         share: {
           title: document.title,
           text: document.querySelector("meta[name='description']").content,
           url: window.location.href,
+        },
+        summary: {
+          ava: "static/img/ava.avif",
+          username: "a-petrova",
+          time: "4 ч.",
         },
         stories: [
           {
@@ -95,7 +97,7 @@
                 disablepictureinpicture
                 aria-hidden="true"
               ></video
-              ><video id="videoEl" src="" preload playsinline disablepictureinpicture></video>
+              ><video id="videoEl" preload playsinline disablepictureinpicture></video>
             </button>
           </div>
           <button type="button" class="ava__share" aria-label="Поделиться">
