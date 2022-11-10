@@ -79,7 +79,7 @@
               class="ava__ring"
               style="background-image: conic-gradient(#33f7f7 5%, #b7ff01, #33f7f7 95%)"
             ></div>
-            <button type="button" class="ava__picture" aria-label="Открыть сторис">
+            <button type="button" id="avaPicture" class="ava__picture" aria-label="Открыть сторис">
               <img
                 src="static/img/ava.avif"
                 alt=""
@@ -94,7 +94,8 @@
                 playsinline
                 disablepictureinpicture
                 aria-hidden="true"
-              ></video>
+              ></video
+              ><video id="videoEl" src="" preload playsinline disablepictureinpicture></video>
             </button>
           </div>
           <button type="button" class="ava__share" aria-label="Поделиться">
