@@ -33,6 +33,7 @@ export default function Stories(props) {
   const [opened, setOpened] = createSignal(false)
   const [formOpen, setFormOpen] = createSignal(false)
   // const [maybeSwipe, setMaybeSwipe] = createSignal(false)
+  const [counter, setCounter] = createSignal(1)
   let timer = null
   // let maybeSwipe = false
 
@@ -51,13 +52,19 @@ export default function Stories(props) {
   // })
 
   function next() {
-    setIndex((index() + 1) % props.stories.length)
+    if (index() < props.stories.length - 1) {
+      setIndex((index() + 1) % props.stories.length)
+    } else {
+      props.onRequestClose?.()
+    }
   }
 
   function prev() {
-    // if (index() !== 0) {
-    setIndex((index() - 1 + props.stories.length) % props.stories.length)
-    // }
+    if (index() !== 0) {
+      setIndex((index() - 1 + props.stories.length) % props.stories.length)
+    } else {
+      setCounter(counter() + 1)
+    }
   }
 
   function onStoryProgress(value) {
@@ -87,7 +94,6 @@ export default function Stories(props) {
     allowedTime = 250
 
   function onPointerDown(e) {
-    // console.log('onMouseDown')
     e.target.setPointerCapture(e.pointerId)
     startX = e.clientX
     startY = e.clientY
@@ -126,7 +132,6 @@ export default function Stories(props) {
   }
 
   function onClick(e) {
-    // console.log('onClick')
     const rect = e.currentTarget.getBoundingClientRect()
     if (e.clientX - rect.left < rect.width / 2) {
       prev()
@@ -200,22 +205,25 @@ export default function Stories(props) {
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
-            // onClick={onTouchClick}
-            // onTouchEnd={onClick}
-            // ref={setRef}
-          >
-            {/* <div class="stories__left" onClick={prev} />
-            <div class="stories__right" onClick={next} /> */}
-          </div>
+          />
 
-          <Show when={opened() && props.stories[index()]} keyed>
-            {(story) => (
-              <Story
-                {...story}
-                playing={playing()}
-                onProgress={onStoryProgress}
-                onRequestForm={() => setFormOpen(true)}
-              />
+          <Show when={counter()} keyed>
+            {(c) => (
+              <>
+                <Show
+                  when={counter() && opened() && props.stories[index()]}
+                  keyed
+                >
+                  {(story) => (
+                    <Story
+                      {...story}
+                      playing={playing()}
+                      onProgress={onStoryProgress}
+                      onRequestForm={() => setFormOpen(true)}
+                    />
+                  )}
+                </Show>
+              </>
             )}
           </Show>
         </div>

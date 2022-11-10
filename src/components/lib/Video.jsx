@@ -13,10 +13,9 @@ export default function Video(props) {
     props.onLoad?.()
   }
 
-  if (!el.paused) {
-    el.currentTime = 0
-    onLoad()
-  }
+  // if (!el.paused) {
+  //   onLoad()
+  // }
 
   setRef(el)
 
@@ -24,6 +23,7 @@ export default function Video(props) {
     el.pause()
     Object.assign(el, {
       src: el._src,
+      muted: true,
       currentTime: 0,
       onloadeddata: null,
       oncanplay: null,
@@ -35,10 +35,15 @@ export default function Video(props) {
   return (
     <>
       {Object.assign(el, {
+        muted: false,
+        currentTime: 0,
         src: props.src,
         onloadeddata: onLoad,
         oncanplay: onLoad,
         oncanplaythrough: onLoad
+        // onloadeddata: () => console.log('onloadeddata'),
+        // oncanplay: () => console.log('oncanplay'),
+        // oncanplaythrough: () => console.log('oncanplaythrough')
       })}
     </>
   )

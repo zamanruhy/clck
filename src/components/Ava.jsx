@@ -33,16 +33,17 @@ async function script() {
   pictureEl.addEventListener('click', (e) => {
     e.preventDefault()
     setStoriesOpen(true)
+    window.videoEl.play()
   })
 
-  window.addEventListener(
-    'click',
-    () => {
-      // console.log('windowclick')
-      window.videoEl.play() //.then(() => window.videoEl.pause())
-    },
-    { once: true }
-  )
+  // window.addEventListener(
+  //   'click',
+  //   () => {
+  //     // console.log('windowclick')
+  //     window.videoEl.play() //.then(() => window.videoEl.pause())
+  //   },
+  //   { once: true }
+  // )
 
   // // https://stackoverflow.com/questions/46483001/programmatically-play-video-with-sound-on-safari-and-mobile-chrome
   // btn.onclick = (e) => {
@@ -114,6 +115,7 @@ export default function Ava() {
           />
           <video
             id="videoEl"
+            muted
             preload
             playsinline
             disablepictureinpicture
