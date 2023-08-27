@@ -1,11 +1,11 @@
-import { createSignal, onMount } from 'solid-js'
+import { createSignal } from 'solid-js'
 import { render } from 'solid-js/web'
 import './Ava.css'
 import Stories from './lib/Stories'
 import ShareIcon from '../icons/share.svg?component'
 // import Form from './lib/Form'
 
-async function script() {
+export function ava() {
   const el = document.querySelector('.ava')
   if (!el) return
 
@@ -60,30 +60,22 @@ async function script() {
     }
   })
 
-  if (!import.meta.env.SSR) {
-    render(
-      () => (
-        <Stories
-          {...window.data?.summary}
-          stories={stories}
-          open={storiesOpen()}
-          onRequestClose={() => setStoriesOpen(false)}
-          onOpen={() => vidEl?.pause()}
-          onClose={() => vidEl?.play()}
-        />
-      ),
-      storiesEl
-    )
-  }
-}
-
-if (import.meta.env.PROD && !import.meta.env.SSR) {
-  script()
+  render(
+    () => (
+      <Stories
+        {...window.data?.summary}
+        stories={stories}
+        open={storiesOpen()}
+        onRequestClose={() => setStoriesOpen(false)}
+        onOpen={() => vidEl?.pause()}
+        onClose={() => vidEl?.play()}
+      />
+    ),
+    storiesEl
+  )
 }
 
 export default function Ava() {
-  onMount(script)
-
   return (
     <div class="ava">
       <div class="ava__content">

@@ -87,17 +87,25 @@ export default function Stories(props) {
     })
   })
 
-  var startX,
+  let startX,
     startY,
     startTime,
     threshold = 50,
-    allowedTime = 250
+    allowedTime = 200
 
   function onPointerDown(e) {
     e.target.setPointerCapture(e.pointerId)
     startX = e.clientX
     startY = e.clientY
     startTime = Date.now()
+
+    if (playing()) {
+      timer = setTimeout(() => {
+        setPlaying(false)
+        timer = null
+      }, allowedTime)
+    }
+
     e.preventDefault()
   }
 
@@ -106,6 +114,16 @@ export default function Stories(props) {
   }
 
   function onPointerUp(e) {
+    if (!playing()) {
+      setPlaying(true)
+      return
+    }
+
+    if (timer) {
+      clearTimeout(timer)
+      timer = null
+    }
+
     const deltaX = e.clientX - startX
     const deltaY = e.clientY - startY
     const elapsedTime = Date.now() - startTime
@@ -138,6 +156,7 @@ export default function Stories(props) {
     } else {
       next()
     }
+
     e.preventDefault()
   }
 
