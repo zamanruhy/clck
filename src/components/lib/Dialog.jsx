@@ -48,20 +48,31 @@ export default function Dialog(props) {
       returnFocusEl = returnFocusEl || document.activeElement
       registerModal(dialog)
     })
+    setTimeout(() => {
+      props.onOpened?.()
+      setFocus()
+    }, 100)
   }
-  function onAfterEnter() {
-    props.onOpened?.()
-    setFocus()
-  }
+  // function onAfterEnter() {
+  //   props.onOpened?.()
+  //   setFocus()
+  // }
   function onBeforeLeave() {
     props.onClose?.()
+
+    setTimeout(() => {
+      props.onClosed?.()
+      returnFocusEl.focus?.({ preventScroll: true })
+      returnFocusEl = null
+      unregisterModal(dialog)
+    }, 100)
   }
-  async function onAfterLeave() {
-    props.onClosed?.()
-    returnFocusEl.focus?.({ preventScroll: true })
-    returnFocusEl = null
-    unregisterModal(dialog)
-  }
+  // async function onAfterLeave() {
+  //   props.onClosed?.()
+  //   returnFocusEl.focus?.({ preventScroll: true })
+  //   returnFocusEl = null
+  //   unregisterModal(dialog)
+  // }
   function onClickOut(e) {
     if (props.closeOnBackdrop && !contentEl.contains(e.target)) {
       props.onRequestClose?.()
@@ -102,7 +113,6 @@ export default function Dialog(props) {
           leaveTo="dialog-backdrop_out"
         />
 
-        {/* <Portal> */}
         <div
           class="dialog"
           classList={{
@@ -130,16 +140,15 @@ export default function Dialog(props) {
             leaveFrom="dialog__wrapper_in"
             leaveTo="dialog__wrapper_out"
             beforeEnter={onBeforeEnter}
-            afterEnter={onAfterEnter}
+            // afterEnter={onAfterEnter}
             beforeLeave={onBeforeLeave}
-            afterLeave={onAfterLeave}
+            // afterLeave={onAfterLeave}
           >
             <div class="dialog__content" ref={contentEl}>
               {props.children}
             </div>
           </TransitionChild>
         </div>
-        {/* </Portal> */}
       </Transition>
     </>
   )

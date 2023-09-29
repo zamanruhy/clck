@@ -104,6 +104,9 @@ export default function Ava() {
             playsinline
             disablepictureinpicture
             aria-hidden="true"
+            ref={(el) => {
+              el.muted = true
+            }}
           />
           <video
             id="videoEl"
